@@ -1,0 +1,615 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── HITAM & PASTEL ─────────────────────────────────────────
+     Dasar hitam pekat (ink) sebagai kanvas, lalu seluruh aksen
+     memakai deret warna pastel: biru langit, periwinkle, lavender,
+     peach, dan mint. Karena aksen berwarna sangat terang, kontras
+     terhadap hitam menjadi tinggi — teks tetap nyaman dibaca.   */
+  --color-navy: #0a0a0c;
+  --color-navy-700: #121217;
+  --color-navy-600: #1a1a21;
+  --color-ink: #050506;
+
+  /* Aksen pastel utama — dipakai di seluruh situs lewat nama token lama */
+  --color-electric: #a9c6e8;
+  --color-electric-300: #dde7f6;
+  --color-electric-400: #bed2ee;
+  --color-mist: #a09aa8;
+
+  /* Aksen pastel pendukung */
+  --color-pastel-lav: #c9bde4;
+  --color-pastel-pink: #e8c4d4;
+  --color-pastel-peach: #edd0bd;
+  --color-pastel-mint: #bfe0d2;
+
+  /* Putih hangat pastel — dipakai ulang oleh text-white / bg-white */
+  --color-white: #f3f0f4;
+
+  /* Netral abu hangat pastel */
+  --color-slate-300: #ddd8de;
+  --color-slate-400: #b4aeb6;
+  --color-slate-500: #8b858e;
+
+  --font-display: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-navy);
+    color: var(--color-white);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-electric) 38%, transparent);
+    color: var(--color-white);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-electric);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-ink);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #2a2a33;
+    border-radius: 999px;
+    border: 2px solid var(--color-ink);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-electric);
+  }
+}
+
+@layer utilities {
+  /* ---------- Scroll reveal ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    transition:
+      opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+      filter 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    filter: blur(6px);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+
+  /* ── Atmosfer background ────────────────────────────────────
+     Lapisan fixed berisi glow radial yang sangat samar. Hadir sebagai
+     latar bersama seluruh section (yang kini transparan), sehingga
+     halaman terasa satu tarikan napas — bukan susunan blok warna. */
+  .atmosphere {
+    background-color: var(--color-navy);
+    background-image:
+      radial-gradient(
+        820px 500px at 6% 2%,
+        rgba(169, 198, 232, 0.16) 0%,
+        transparent 68%
+      ),
+      radial-gradient(
+        760px 520px at 96% 16%,
+        rgba(201, 189, 228, 0.13) 0%,
+        transparent 70%
+      ),
+      radial-gradient(
+        700px 480px at 84% 62%,
+        rgba(232, 196, 212, 0.075) 0%,
+        transparent 72%
+      ),
+      radial-gradient(
+        1150px 760px at 44% 110%,
+        rgba(191, 224, 210, 0.09) 0%,
+        transparent 72%
+      );
+  }
+
+  /* Latar section lembut — gradasi vertikal sangat tipis. */
+  .section-soft {
+    background-image: linear-gradient(
+      180deg,
+      rgba(243, 240, 244, 0.016) 0%,
+      rgba(243, 240, 244, 0) 42%,
+      rgba(243, 240, 244, 0.014) 100%
+    );
+  }
+
+  .glass {
+    background: linear-gradient(
+      145deg,
+      rgba(243, 240, 244, 0.055) 0%,
+      rgba(243, 240, 244, 0.016) 100%
+    );
+    backdrop-filter: blur(16px) saturate(115%);
+    -webkit-backdrop-filter: blur(16px) saturate(115%);
+    border: 1px solid rgba(243, 240, 244, 0.075);
+  }
+
+  .glass-strong {
+    background: rgba(10, 10, 12, 0.76);
+    backdrop-filter: blur(20px) saturate(120%);
+    -webkit-backdrop-filter: blur(20px) saturate(120%);
+    border-bottom: 1px solid rgba(243, 240, 244, 0.08);
+  }
+
+  .text-outline {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(243, 240, 244, 0.24);
+  }
+
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.075;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  }
+
+  .grid-lines {
+    background-image:
+      linear-gradient(to right, rgba(243, 240, 244, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(243, 240, 244, 0.03) 1px, transparent 1px);
+    background-size: 84px 84px;
+  }
+
+  .glow-electric {
+    box-shadow:
+      0 0 0 1px rgba(169, 198, 232, 0.32),
+      0 18px 60px -20px rgba(169, 198, 232, 0.4);
+  }
+
+  /* ── Panel motion graphics ──────────────────────────────────
+     Lingkaran gradasi pastel yang bergerak lambat, meniru alur
+     bentuk pada karya animasi. Dihentikan bila pengguna meminta
+     pengurangan gerakan (lihat blok prefers-reduced-motion).   */
+  .mg-orb {
+    position: absolute;
+    border-radius: 999px;
+    filter: blur(46px);
+    will-change: transform;
+  }
+  .mg-orb-a {
+    top: -22%;
+    left: -8%;
+    width: 58%;
+    aspect-ratio: 1;
+    background: radial-gradient(circle, rgba(169, 198, 232, 0.7) 0%, transparent 70%);
+    animation: mg-drift-a 13s ease-in-out infinite;
+  }
+  .mg-orb-b {
+    right: -6%;
+    bottom: -26%;
+    width: 52%;
+    aspect-ratio: 1;
+    background: radial-gradient(circle, rgba(201, 189, 228, 0.66) 0%, transparent 70%);
+    animation: mg-drift-b 16s ease-in-out infinite;
+  }
+  .mg-orb-c {
+    top: 24%;
+    left: 42%;
+    width: 34%;
+    aspect-ratio: 1;
+    background: radial-gradient(circle, rgba(232, 196, 212, 0.52) 0%, transparent 70%);
+    animation: mg-drift-c 11s ease-in-out infinite;
+  }
+
+  .marquee-track {
+    animation: zp-marquee 34s linear infinite;
+  }
+
+  .animate-float {
+    animation: zp-float 7s ease-in-out infinite;
+  }
+
+  .animate-pulse-ring {
+    animation: zp-pulse 2.4s ease-out infinite;
+  }
+
+  .animate-scroll-cue span {
+    animation: zp-scroll 2.1s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+}
+
+@keyframes zp-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes zp-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes zp-pulse {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.85;
+  }
+  70% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes zp-scroll {
+  0% {
+    transform: translateY(-100%);
+  }
+  55% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* ── Intro sinematik ───────────────────────────────────────────
+   Semua keyframe hanya memakai transform/opacity/clip-path agar
+   berjalan di compositor (tidak memicu reflow/layout).             */
+
+/* Logo: terungkap dari balik masker + blur + scale */
+@keyframes zp-letter-in {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+    transform: translate3d(0, 42px, 0) scale3d(1.16, 1.16, 1);
+    filter: blur(14px);
+  }
+  55% {
+    opacity: 1;
+    filter: blur(3px);
+  }
+  100% {
+    opacity: 1;
+    clip-path: inset(0 0 -12% 0);
+    transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+    filter: blur(0);
+  }
+}
+.zp-letter {
+  display: inline-block;
+  opacity: 0;
+  animation: zp-letter-in 1.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Garis aksen: merentang lalu berkedip sekali seperti lampu sinar */
+@keyframes zp-line-grow {
+  0% {
+    transform: scale3d(0, 1, 1);
+    opacity: 0;
+  }
+  45% {
+    transform: scale3d(1, 1, 1);
+    opacity: 1;
+  }
+  62% {
+    opacity: 0.35;
+  }
+  78% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale3d(1, 1, 1);
+    opacity: 0.9;
+  }
+}
+.zp-line {
+  width: min(300px, 62vw);
+  transform: scale3d(0, 1, 1);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-electric) 32%,
+    var(--color-pastel-lav) 68%,
+    transparent
+  );
+  box-shadow: 0 0 18px rgba(169, 198, 232, 0.55);
+  animation: zp-line-grow 1.1s cubic-bezier(0.16, 1, 0.3, 1) 880ms forwards;
+}
+
+/* Label peran: naik + letter-spacing mengetat */
+@keyframes zp-role-in {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+    letter-spacing: 0.5em;
+    filter: blur(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    letter-spacing: 0.28em;
+    filter: blur(0);
+  }
+}
+.zp-role {
+  opacity: 0;
+  animation: zp-role-in 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Titik REC berkedip seperti lampu kamera */
+@keyframes zp-rec-blink {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+  50% {
+    opacity: 0.25;
+    transform: scale3d(0.72, 0.72, 1);
+  }
+}
+.zp-rec {
+  opacity: 0;
+  animation: zp-role-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.zp-rec-dot {
+  animation: zp-rec-blink 1.25s ease-in-out infinite;
+}
+
+/* Penghitung frame memudar masuk */
+@keyframes zp-counter-in {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+.zp-counter {
+  opacity: 0;
+  animation: zp-counter-in 0.8s ease-out forwards;
+}
+
+/* Glow pastel bernapas */
+@keyframes zp-glow-breathe {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale3d(1, 1, 1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale3d(1.12, 1.12, 1);
+  }
+}
+.zp-glow {
+  background:
+    radial-gradient(560px 400px at 20% 30%, rgba(169, 198, 232, 0.24) 0%, transparent 66%),
+    radial-gradient(540px 380px at 80% 70%, rgba(201, 189, 228, 0.2) 0%, transparent 68%),
+    radial-gradient(420px 320px at 62% 26%, rgba(232, 196, 212, 0.13) 0%, transparent 70%);
+  animation: zp-glow-breathe 3s ease-in-out infinite;
+}
+
+/* Vinyet: gelap di tepi, fokus ke tengah */
+.zp-vignette {
+  background: radial-gradient(78% 62% at 50% 50%, transparent 42%, rgba(5, 5, 6, 0.82) 100%);
+}
+
+/* Sorot cahaya menyapu melintasi teks */
+@keyframes zp-sheen-sweep {
+  0% {
+    transform: translate3d(-130%, 0, 0) rotate(9deg);
+    opacity: 0;
+  }
+  18% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(130%, 0, 0) rotate(9deg);
+    opacity: 0;
+  }
+}
+.zp-sheen {
+  background: linear-gradient(
+    100deg,
+    transparent 38%,
+    rgba(231, 236, 243, 0.11) 49%,
+    rgba(187, 210, 236, 0.16) 52%,
+    transparent 63%
+  );
+  animation: zp-sheen-sweep 2.1s cubic-bezier(0.4, 0, 0.2, 1) 620ms;
+}
+
+/* Sudut bingkai film: tumbuh dari titik */
+@keyframes zp-frame-in {
+  0% {
+    opacity: 0;
+    transform: scale3d(0.2, 0.2, 1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+}
+.zp-frame {
+  opacity: 0;
+  animation: zp-frame-in 1.1s cubic-bezier(0.16, 1, 0.3, 1) 150ms forwards;
+}
+.zp-frame-corner {
+  height: 30px;
+  width: 30px;
+  border-color: rgba(243, 240, 244, 0.34);
+}
+.zp-frame-corner:first-child {
+  border-top-width: 1px;
+  border-left-width: 1px;
+}
+.zp-frame-corner:nth-child(2) {
+  border-top-width: 1px;
+  border-right-width: 1px;
+}
+.zp-frame-corner:nth-child(3) {
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+}
+.zp-frame-corner:nth-child(4) {
+  border-bottom-width: 1px;
+  border-right-width: 1px;
+}
+
+/* ── Keluar: tirai terbelah diagonal + konten terserap ── */
+@keyframes zp-panel-top {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-14%, -102%, 0);
+  }
+}
+@keyframes zp-panel-bottom {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(14%, 102%, 0);
+  }
+}
+.zp-panel {
+  will-change: transform;
+}
+.zp-split .zp-panel-top {
+  animation: zp-panel-top 1.05s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+.zp-split .zp-panel-bottom {
+  animation: zp-panel-bottom 1.05s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+
+/* Konten: mengambang naik & memudar saat tirai terbelah */
+@keyframes zp-content-leave {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -34px, 0) scale3d(1.06, 1.06, 1);
+    filter: blur(9px);
+  }
+}
+.zp-content-leave {
+  animation: zp-content-leave 0.62s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+/* Orb motion graphics: pergeseran lembut, tanpa rotasi berat */
+@keyframes mg-drift-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(16%, 12%, 0) scale(1.12);
+  }
+}
+@keyframes mg-drift-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.05);
+  }
+  50% {
+    transform: translate3d(-14%, -10%, 0) scale(1);
+  }
+}
+@keyframes mg-drift-c {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.95);
+  }
+  50% {
+    transform: translate3d(-18%, 14%, 0) scale(1.18);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  .marquee-track {
+    animation: none !important;
+  }
+  .mg-orb-a,
+  .mg-orb-b,
+  .mg-orb-c {
+    animation: none !important;
+  }
+
+  /* Intro dilewati penuh bila pengguna meminta pengurangan gerakan */
+  .zp-letter,
+  .zp-line,
+  .zp-role,
+  .zp-rec,
+  .zp-rec-dot,
+  .zp-counter,
+  .zp-glow,
+  .zp-sheen,
+  .zp-frame,
+  .zp-split .zp-panel-top,
+  .zp-split .zp-panel-bottom,
+  .zp-content-leave {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    clip-path: none !important;
+  }
+}
